@@ -10,9 +10,12 @@
  */
 package com.xtyghost.test.springtest.collections;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -23,6 +26,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @create 2018-12-29
  * @since 1.0.0
  */
+@SpringBootTest
+@RunWith(SpringRunner.class)
+@lombok.extern.slf4j.Slf4j
 public class CollectionTest {
     public static void main(String[] args) {
         CopyOnWriteArrayList<Object> objects = new CopyOnWriteArrayList<>();
@@ -32,6 +38,20 @@ public class CollectionTest {
         for (Integer integer : integers1) {
             System.out.println(integer);
         }
+
+    }
+    @Test
+    public void test (){
+        HashMap<String, String> m = new HashMap<>();
+    }
+    @Test
+    public void bigSet(){
+        BitSet bitSet = new BitSet(10);
+        bitSet.and(new BitSet(11));
+        System.out.println(bitSet);
+        bitSet.set(10,false);
+        System.out.println(bitSet.get(10));
+//        Assert.assertEquals(21,bitSet.);
     }
 
 }

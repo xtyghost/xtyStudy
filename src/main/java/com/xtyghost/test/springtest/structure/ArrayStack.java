@@ -20,4 +20,34 @@ package com.xtyghost.test.springtest.structure;
  */
 public class ArrayStack<E> implements Stack<E> {
 
+    private Array<E> array;
+
+    public ArrayStack(int capacity) {
+        array=new Array<>(capacity);
+    }
+
+    @Override
+    public int getSize() {
+        return array.size();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return array.isempty();
+    }
+
+    @Override
+    public void push(E e) {
+       array.add(e);
+    }
+
+    @Override
+    public E pop() {
+        return array.remove(array.size()-1);
+    }
+
+    @Override
+    public E peek() {
+        return array.get(array.size()-1);
+    }
 }
