@@ -24,7 +24,7 @@ import java.nio.CharBuffer;
 import java.nio.channels.FileChannel;
 
 /**
- * 〈一句话功能简述〉<br> 
+ * 〈一句话功能简述〉<br>
  * 〈用来演示nio的类〉
  *
  * @author xutong
@@ -35,34 +35,37 @@ import java.nio.channels.FileChannel;
 @RunWith(SpringRunner.class)
 @Slf4j
 public class NioTest {
-    private static final int BSIZE=1024;
+    private static final int BSIZE = 1024;
+
     @Test
     public void test1() throws IOException {
         FileChannel in = new FileInputStream("/Users/xutong/IdeaProjects/javaWeb-project/springtest/src/test/java/com/xtyghost/test/springtest/nio/orignalfile").getChannel();
         FileChannel out = new FileOutputStream("/Users/xutong/IdeaProjects/javaWeb-project/springtest/src/test/java/com/xtyghost/test/springtest/nio/copyfile").getChannel();
         ByteBuffer buffer = ByteBuffer.allocate(BSIZE);
-        while (in.read(buffer)!=-1){
+        while (in.read(buffer) != -1) {
             buffer.flip(); //prepare  for writing
             out.write(buffer);
             buffer.clear();  //prepare for reading
         }
 
     }
+
     @Test
     public void test2() throws IOException {
         FileChannel in = new FileInputStream("/Users/xutong/IdeaProjects/javaWeb-project/springtest/src/test/java/com/xtyghost/test/springtest/nio/orignalfile").getChannel();
         FileChannel out = new FileOutputStream("/Users/xutong/IdeaProjects/javaWeb-project/springtest/src/test/java/com/xtyghost/test/springtest/nio/copyfile2").getChannel();
         ByteBuffer buffer = ByteBuffer.allocate(BSIZE);
-        in.transferTo(0,in.size(),out);
+        in.transferTo(0, in.size(), out);
 
     }
+
     @Test
     public void test3() throws IOException {
         FileChannel in = new FileInputStream("orignalfile").getChannel();
         FileChannel out = new FileOutputStream("copyfile3").getChannel();
         ByteBuffer buffer = ByteBuffer.allocate(BSIZE);
         CharBuffer charBuffer = buffer.asCharBuffer();
-        in.transferTo(0,in.size(),out);
+        in.transferTo(0, in.size(), out);
 
     }
 
