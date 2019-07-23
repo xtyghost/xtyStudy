@@ -33,8 +33,8 @@ public class WSServer {
         EventLoopGroup workGroup = new NioEventLoopGroup();
         try {
             ServerBootstrap serverBootstrap = new ServerBootstrap();
-            serverBootstrap.group(bossGroup, workGroup).channel(NioServerSocketChannel.class).childHandler(null);
-            ChannelFuture future = serverBootstrap.bind(8088).sync();
+            serverBootstrap.group(bossGroup, workGroup).channel(NioServerSocketChannel.class).childHandler(new WSServerInitializer());
+            ChannelFuture future = serverBootstrap.bind(8080).sync();
             future.channel().closeFuture().sync();
         } finally {
             bossGroup.shutdownGracefully();

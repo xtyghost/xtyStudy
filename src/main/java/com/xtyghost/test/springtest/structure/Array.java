@@ -11,6 +11,8 @@
 package com.xtyghost.test.springtest.structure;
 
 
+import java.util.Arrays;
+
 /**
  * 〈一句话功能简述〉<br>
  * 〈以自定义的Arraylist〉
@@ -20,8 +22,8 @@ package com.xtyghost.test.springtest.structure;
  * @since 1.0.0
  */
 public class Array<E> {
+    private final int leastdecCap = 40;
     private Integer capability = 10;
-    private final int leastdecCap=40;
     private Integer size = 0;
     private E[] array = (E[]) new Object[capability];
 
@@ -37,25 +39,30 @@ public class Array<E> {
         //如果超过进行扩容
         if (size + 1 > capability) {
             incre(e);
+        }else {
+            array[size++] = e;
         }
 
     }
-   public E remove(int index){
-       //remove元素
-      System.arraycopy(array,index+1,array,index,capability-index-1);
-       //判读是否需要减少容量
-       if (capability>leastdecCap&&size-1<=capability>>2){
-           E[] oldarray=array;
-           array= (E[]) new Object[capability>>2];
-           System.arraycopy(oldarray,0,array,0,capability>>2);
-       }
-       return array[--size];
-   }
+
+    public E remove(int index) {
+        //remove元素
+        System.arraycopy(array, index + 1, array, index, capability - index - 1);
+        //判读是否需要减少容量
+        if (capability > leastdecCap && size - 1 <= capability >> 2) {
+            E[] oldarray = array;
+            array = (E[]) new Object[capability >> 2];
+            System.arraycopy(oldarray, 0, array, 0, capability >> 2);
+        }
+        return array[--size];
+    }
+
     private void incre(E e) {
         E[] oldarray = array;
-        array = (E[]) new Object[capability + capability >> 1];
+        array = (E[]) new Object[(capability>>1)+capability];
         System.arraycopy(oldarray, 0, array, 0, size);
-        array[size++]=e;
+        array[size++] = e;
+        capability=(capability>>1)+capability;
     }
 
     /**
@@ -73,6 +80,25 @@ public class Array<E> {
         return -1;
     }
 
+    /**
+     * 交换索引的元素
+     *
+     * @param i
+     * @param j
+     */
+    public void swap(int i, int j) {
+        if (i < 0 || j < 0 || i >= size || j >= size) {
+            throw new IllegalArgumentException("index cannot be zore");
+
+        }
+        E e = array[i];
+        array[i] = array[j];
+        array[j] = e;
+
+
+    }
+
+
     public int size() {
         return size;
     }
@@ -83,9 +109,18 @@ public class Array<E> {
         }
         return array[index];
     }
-    public boolean isempty(){
-        return size==0;
+
+    public boolean isempty() {
+        return size == 0;
     }
 
-
+    @Override
+    public String toString() {
+        return "Array{" +
+                "leastdecCap=" + leastdecCap +
+                ", capability=" + capability +
+                ", size=" + size +
+                ", array=" + Arrays.toString(array) +
+                '}';
+    }
 }
