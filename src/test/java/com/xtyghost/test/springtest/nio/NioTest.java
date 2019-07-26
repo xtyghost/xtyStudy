@@ -16,9 +16,7 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.channels.FileChannel;
@@ -67,6 +65,29 @@ public class NioTest {
         CharBuffer charBuffer = buffer.asCharBuffer();
         in.transferTo(0, in.size(), out);
 
+    }
+    @Test
+    public void test4() throws IOException {
+        RandomAccessFile aFile = new RandomAccessFile("/Users/xutong/IdeaProjects/javaWeb-project/springtest/src/test/java/com/xtyghost/test/springtest/nio/copyfile", "rw");
+        FileChannel inChannel = aFile.getChannel();
+
+        ByteBuffer buf = ByteBuffer.allocate(48);
+
+        int bytesRead = inChannel.read(buf);
+        System.out.println(bytesRead);
+        while (bytesRead != -1) {
+
+            System.out.println("Read " + bytesRead);
+            buf.flip();
+
+            while (buf.hasRemaining()) {
+                System.out.print((char) buf.get());
+            }
+
+            buf.clear();
+            bytesRead = inChannel.read(buf);
+        }
+        aFile.close();
     }
 
 }

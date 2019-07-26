@@ -39,7 +39,7 @@ public class Array<E> {
         //如果超过进行扩容
         if (size + 1 > capability) {
             incre(e);
-        }else {
+        } else {
             array[size++] = e;
         }
 
@@ -47,22 +47,25 @@ public class Array<E> {
 
     public E remove(int index) {
         //remove元素
+        E ret = array[index];
         System.arraycopy(array, index + 1, array, index, capability - index - 1);
         //判读是否需要减少容量
         if (capability > leastdecCap && size - 1 <= capability >> 2) {
             E[] oldarray = array;
             array = (E[]) new Object[capability >> 2];
             System.arraycopy(oldarray, 0, array, 0, capability >> 2);
+            capability=array.length;
         }
-        return array[--size];
+        size--;
+        return ret;
     }
 
     private void incre(E e) {
         E[] oldarray = array;
-        array = (E[]) new Object[(capability>>1)+capability];
+        array = (E[]) new Object[(capability >> 1) + capability];
         System.arraycopy(oldarray, 0, array, 0, size);
         array[size++] = e;
-        capability=(capability>>1)+capability;
+        capability = (capability >> 1) + capability;
     }
 
     /**
