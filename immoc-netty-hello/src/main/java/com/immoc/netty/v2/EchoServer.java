@@ -31,26 +31,31 @@ import static io.netty.util.CharsetUtil.UTF_8;
  * @since 1.0.0
  */
 public class EchoServer {
-    private final int port;
+    private  int port;
 
     public EchoServer(int port) {
         this.port = port;
     }
 
-    public static void main(String[] args) {
-        if (args.length != 1) {
-            System.err.println("args.length != 1");
-        }
-        int port = Integer.parseInt(args[0]);
+    public static void main(String[] args) throws InterruptedException {
+        int port = 8080;
+//        try {
+//            if (args.length != 1) {
+//                System.err.println("args.length != 1");
+//            }
+//            port = Integer.parseInt(args[0]);
+//        } catch (NumberFormatException e) {
+//            e.printStackTrace();
+//        }
         new EchoServer(port).start();
     }
 
-    private void start() {
+    private void start() throws InterruptedException {
         EchoServerHandler echoServerHandler = new EchoServerHandler();
-        NioEventLoopGroup eventExecutors = new NioEventLoopGroup();
+        NioEventLoopGroup group = new NioEventLoopGroup();
         try {
             ServerBootstrap serverBootstrap = new ServerBootstrap();
-            serverBootstrap.group(eventExecutors).channel(NioServerSocketChannel.class).localAddress(new InetSocketAddress(port)).childHandler(new ChannelInitializer<SocketChannel>() {
+            serverBootstrap.group(group).channel(NioServerSocketChannel.class).localAddress(new InetSocketAddress(port)).childHandler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 protected void initChannel(SocketChannel ch) throws Exception {
                     ch.pipeline().addLast(echoServerHandler);
@@ -58,9 +63,10 @@ public class EchoServer {
             });
             ChannelFuture sync = serverBootstrap.bind().sync();
             sync.channel().closeFuture().sync();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } finally {
+            group.shutdownGracefully().sync();
         }
+
 
     }
 }
@@ -78,7 +84,7 @@ class EchoServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
-        super.channelReadComplete(ctx);
+//        super.channelReadComplete(ctx);
     }
 
     @Override
